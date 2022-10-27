@@ -53,6 +53,19 @@ app.post('/api/persons', (request, response) => {
 
   const newId = Math.floor(Math.random() * (100000000))
   const newPerson = request.body
+  const existingPerson = persons.find(person => person.name === newPerson.name)
+
+
+  if(!newPerson.name || !newPerson.number){
+    return response.status(400).json({
+      error: 'name or number cannot be empty'
+    })
+  } else if(existingPerson){
+    return response.status(400).json({
+      error: 'name already exists'
+    })
+  }
+
   newPerson.id = newId
   persons = persons.concat(newPerson)
   response.json(newPerson)
