@@ -27,7 +27,27 @@ let persons = [
 ]
 
 
-app.use(morgan('tiny'))
+morgan.token('contentPrint', function formContent (req) {
+  // const toPrint = `{"name": ${req.body.name}, "number": ${req.body.number}}` exercise is different, this method prints different the quotes
+  const toPrint = JSON.stringify({name : req.body.name, number: req.body.number})
+
+  return toPrint
+})
+
+app.use(morgan(function (tokens, req, res) {
+  if(tokens.method(req, res)=== 'POST'){
+
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms',
+      tokens.contentPrint(req, res),
+      // JSON.stringify(req.body) also prints id, in exercise there's no id
+    ].join(' ')
+  }
+}))
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
