@@ -1,0 +1,8 @@
+POST https://phonebook-app-lipasofra.fly.dev/api/persons
+Content-Type: application/json
+
+{
+    "name": "Lina Soler",
+    "number": "573174121609"
+
+}

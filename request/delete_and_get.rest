@@ -1,0 +1,5 @@
+DELETE https://phonebook-app-lipasofra.fly.dev/api/persons/85189052
+
+###
+
+GET https://phonebook-app-lipasofra.fly.dev/api/persons/
