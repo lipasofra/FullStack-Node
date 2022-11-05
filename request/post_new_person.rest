@@ -2,7 +2,7 @@ POST https://phonebook-app-lipasofra.fly.dev/api/persons
 Content-Type: application/json
 
 {
-    "name": "Lina LOLO",
+    "name": "Lin",
     "number": "573174121609"
 
 }

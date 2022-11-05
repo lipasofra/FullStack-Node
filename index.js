@@ -10,7 +10,6 @@ app.use(cors())
 app.use(express.static('build'))
 
 morgan.token('contentPrint', function formContent (req) {
-  // const toPrint = `{"name": ${req.body.name}, "number": ${req.body.number}}` exercise is different, this method prints different the quotes
   const toPrint = JSON.stringify({name : req.body.name, number: req.body.number})
 
   return toPrint
@@ -26,7 +25,6 @@ app.use(morgan(function (tokens, req, res) {
       tokens.res(req, res, 'content-length'), '-',
       tokens['response-time'](req, res), 'ms',
       tokens.contentPrint(req, res),
-      // JSON.stringify(req.body) also prints id, in exercise there's no id
     ].join(' ')
   }
 }))
@@ -59,24 +57,26 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
 
-  const newId = Math.floor(Math.random() * (100000000))
-  const newPerson = request.body
-  const existingPerson = persons.find(person => person.name === newPerson.name)
+  const body = request.body
+  console.log(body)
+  console.log(body.content)
 
 
-  if(!newPerson.name || !newPerson.number){
+  if(body.name === undefined || body.number === undefined){
     return response.status(400).json({
-      error: 'name or number cannot be empty'
-    })
-  } else if(existingPerson){
-    return response.status(400).json({
-      error: 'name already exists'
+      error: "name or number missing"
     })
   }
 
-  newPerson.id = newId
-  persons = persons.concat(newPerson)
-  response.json(newPerson)
+
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 
