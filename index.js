@@ -39,9 +39,14 @@ app.get('/api/persons', (request, response, next) => {
 app.get('/info', (request, response) => {
 
   const time = Date()
-  const records = persons.length
-  const message = `Phonebook has info for ${records} people \n\n${time}`
-  response.end(message)
+
+  Person.find({}).then(persons => {
+    const records = persons.length
+    const message = `Phonebook has info for ${records} people \n\n${time}`
+    response.end(message)
+  }).catch(error => next(error))
+
+
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -74,10 +79,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
 
   const body = request.body
-  console.log(body)
-  console.log(body.content)
-
-
+ 
   if(body.name === undefined || body.number === undefined){
     return response.status(400).json({
       error: "name or number missing"
